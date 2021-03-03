@@ -1,0 +1,53 @@
+<%@page import="entidades.Articulos"%>
+<%@page import="entidades.Usuarios"%>
+<%
+    Usuarios user = (Usuarios) session.getAttribute("user");
+    String msgerror = (String) request.getAttribute("msgerror");
+%>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">El Trastero</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="/TFC_DAW/home">Home</a></li>
+                <li><a href="/TFC_DAW/Art/ver">Ver artículos</a></li>
+                <% if(user != null) { %>
+                    <li><a href="/TFC_DAW/Art/alta">Publicar artículos</a></li>
+                    <li><a href="/TFC_DAW/Art/verFav">Mis artículos de interés</a></li>
+                <% } %>
+                <li><a href="/TFC_DAW/User/Alta">Alta</a></li>
+                <li><a href="/TFC_DAW/libro">Libro de Firmas</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <% if(msgerror != null) { %>
+                    <p class="navbar-text"><%= msgerror %></p>
+                <% } %>
+                <% if(user == null) { %>
+                    <form action="/TFC_DAW/User/login" method="POST" class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input type="email" id="user" name="user" class="form-control" placeholder="Usuario" required>
+                            <input type="password" id="pass" name="pass" class="form-control" placeholder="Contraseña" required>
+                            <input type="text" id="pag" name="pag" class="form-control" value="<%=request.getRequestURL()%>">
+                            <% if(request.getAttribute("articulo") != null) { %>
+                                <input type="text" id="idArt" name="idArt" class="form-control" value="<%=((Articulos)request.getAttribute("articulo")).getId()%>">
+                            <% } %>
+                        </div>
+                        <button type="submit" class="btn btn-default">Login</button>
+                    </form>
+                <% } else { %>
+                    <p class="navbar-text">Bienvenido, <%= user.getNombre() %></p>
+                    <form action="/TFC_DAW/User/logout" class="navbar-form navbar-left">
+                        <button type="submit" class="btn btn-default">Logout</button>
+                    </form>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>
